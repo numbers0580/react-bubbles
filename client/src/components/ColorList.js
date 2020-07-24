@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
+//import axios from "axios";
+import {axiosWithAuth} from '../utils/axiosWithAuth';
+import {useHistory} from 'react-router-dom';
 
 const initialColor = {
   color: "",
@@ -10,6 +12,7 @@ const ColorList = ({ colors, updateColors }) => {
   console.log(colors);
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
+  const history = useHistory();
 
   const editColor = color => {
     setEditing(true);
@@ -21,10 +24,38 @@ const ColorList = ({ colors, updateColors }) => {
     // Make a put request to save your updated color
     // think about where will you get the id from...
     // where is is saved right now?
+    axiosWithAuth()
+      .put(`/api/colors/${colorToEdit.id}`, colorToEdit)
+      .then(editedColor => {
+        console.log('Testing ColorList.js colorToEdit response:', editedColor.data);
+        //history.push('/bubbly');
+        updateColors(colors.map(hue => {
+          return hue.id === editedColor.data.id ? editedColor.data : hue;
+          // if(hue.id === editedColor.data.id) {
+          //   return editedColor.data;
+          // } else {
+          //   return hue;
+          // }
+        }));
+      })
+      .catch(editError => {
+        console.log('(ColorList) Error editing a color in API');
+      })
   };
 
   const deleteColor = color => {
     // make a delete request to delete this color
+    axiosWithAuth()
+      .delete(`/api/colors/${color.id}`)
+      .then(deletion => {
+        console.log('Testing color to delete:', deletion.data);
+        updateColors(colors.filter(remain => {
+          return remain.id !== deletion.data;
+        }));
+      })
+      .catch(delError => {
+        console.log('(ColorList - delete): No! I don\'t wanna go!');
+      })
   };
 
   return (
