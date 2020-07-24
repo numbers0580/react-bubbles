@@ -26,7 +26,8 @@ const Login = () => {
       .then(logResponse => {
         console.log('Testing response from Login Submit:', logResponse.data);
         localStorage.setItem('token', logResponse.data.payload);
-        history.push('/bubbly');
+        setTimeout(() => {history.push('/bubbly')}, 2000);
+        //history.push('/bubbly');
       })
       .catch(logError => {
         console.log('(Login) Error logging in');
@@ -35,32 +36,53 @@ const Login = () => {
 
   const formStyle = () => {
     return {
-      section: {},
-      h1: {},
-      form: {},
-      div: {},
-      btnDiv: {},
-      btn: {}
+      container: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+      },
+      h1: {
+        color: 'red'
+      },
+      form: {
+        width: '450px',
+        height: '100px',
+        margin: '10px 50px',
+        padding: '20px 10px',
+        borderRadius: '20px',
+        background: 'silver'},
+      div: {
+        width: '320px',
+        display: 'flex'
+      },
+      btnDiv: {
+        width: '150px',
+        marginTop: '10px'
+      },
+      btn: {
+        color: 'green'
+      }
     };
   };
 
   return (
-    <section style={formStyle().section}>
+    <div style={formStyle().container}>
       <h1 style={formStyle().h1}>Welcome to the Bubble App!</h1>
-      <form  style={formStyle().form} onSubmit={submitLogin}>
+      <form style={formStyle().form} onSubmit={submitLogin}>
         <div style={formStyle().div}>
-          <div><label>Enter Username:</label></div>
+          <div style={{width: '220px'}}><label>Enter Username:</label></div>
           <div><input type='text' name='username' value={credentials.username} onChange={updateFields} /></div>
         </div>
         <div style={formStyle().div}>
-          <div><label>Enter Password:</label></div>
+          <div style={{width: '220px'}}><label>Enter Password:</label></div>
           <div><input type='password' name='password' value={credentials.password} onChange={updateFields} /></div>
         </div>
         <div style={formStyle().btnDiv}>
           <button style={formStyle().btn}>Login!</button>
         </div>
       </form>
-    </section>
+    </div>
   );
 };
 
