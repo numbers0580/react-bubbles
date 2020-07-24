@@ -27,9 +27,21 @@ In this project you will create a login page and request a token from the server
 Demonstrate your understanding of this Sprint's concepts by answering the following free-form questions. Edit this document to include your answers after each question. Make sure to leave a blank line above and below your answer so it is clear and easy to read by your project manager.
 
 - [ ] Explain what a token is used for.
+  A token is an encrypted string used to validate some form of access - most commonly login credentials.
 - [ ] What steps can you take in your web apps to keep your data secure?
+  We can implement Protected/Private Routes to ensure a valid token before the user gains access to certain data.
+  Other things I've learned over the years: you can obfuscate data. You can store specific data in a file placed in gitignore, as well.
 - [ ] Describe how web servers work.
+  A web server (whether a VPS or a physical personal server or a personal computer) would store the web pages for a site.
+  A user would make a request to the site by entering a URL. The URL is passed through a DNS to check the URL against a list of IP addresses
+  to find the correct IP address where the request is for. Assuming all validation, if any, is successful the web server grants permission to display
+  the web page(s) on the user's computer. FYI: VPS is the cheapest route. I found that even if you use your own computer, you would have to contact your ISP
+  to open up certain ports to allow it to act as a server. It usually costs $250/month or more to have those ports opened.
 - [ ] Which HTTP methods can be mapped to the CRUD acronym that we use when interfacing with APIs/Servers.
+  (C)reate = axios.post(). This takes in a server url address and an object
+  (R)ead = axios.get(). This takes in a server url address.
+  (U)pdate = axios.put(). This takes in a server url address for a specific id and an object
+  (D)elete = axios.delete(). This takes in a server url address for a specific id
 
 
 ## Project Set Up

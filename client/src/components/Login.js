@@ -1,17 +1,18 @@
 import React, {useState} from "react";
+import axios from 'axios';
 import {axiosWithAuth} from '../utils/axiosWithAuth';
 import {useHistory} from 'react-router-dom';
 
 const blankFields = {
   username: '',
-  password: '',
+  password: ''
 };
 
-const Login = () => {
+const Login = props => {
   // make a post request to retrieve a token from the api
   // when you have handled the token, navigate to the BubblePage route
   const [credentials, setCredentials] = useState(blankFields);
-  const history = useHistory();
+  //const history = useHistory();
 
   const updateFields = evt => {
     const {name, value} = evt.target;
@@ -21,14 +22,14 @@ const Login = () => {
 
   const submitLogin = evt => {
     evt.preventDefault();
+    console.log('Checking credentials:', credentials.username, credentials.password);
+    //axios.post('http://localhost:5000/api/login', credentials)
     axiosWithAuth()
       .post('/api/login', credentials)
       .then(logResponse => {
         console.log('Testing response from Login Submit:', logResponse.data);
         localStorage.setItem('token', logResponse.data.payload);
-        document.getElementById('loadMsg').style.display = 'block';
-        setTimeout(() => {history.push('/bubbly')}, 1500);
-        //history.push('/bubbly');
+        props.history.push('/bubbly');
       })
       .catch(logError => {
         console.log('(Login) Error logging in');
@@ -62,6 +63,7 @@ const Login = () => {
         marginTop: '10px'
       },
       btn: {
+        background: 'lightgreen',
         color: 'green'
       }
     };
@@ -81,9 +83,6 @@ const Login = () => {
         </div>
         <div style={formStyle().btnDiv}>
           <button style={formStyle().btn}>Login!</button>
-        </div>
-        <div id="loadMsg" style={{display: 'none'}}>
-          <p>Validating. Loading page...</p>
         </div>
       </form>
     </div>

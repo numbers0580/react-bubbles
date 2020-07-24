@@ -30,12 +30,12 @@ const ColorList = ({ colors, updateColors }) => {
         console.log('Testing ColorList.js colorToEdit response:', editedColor.data);
         //history.push('/bubbly');
         updateColors(colors.map(hue => {
-          return hue.id === editedColor.data.id ? editedColor.data : hue;
-          // if(hue.id === editedColor.data.id) {
-          //   return editedColor.data;
-          // } else {
-          //   return hue;
-          // }
+          //return hue.id === editedColor.data.id ? editedColor.data : hue;
+          if(hue.id === editedColor.data.id) {
+            return editedColor.data;
+          } else {
+            return hue;
+          }
         }));
       })
       .catch(editError => {
