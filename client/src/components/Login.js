@@ -26,7 +26,8 @@ const Login = () => {
       .then(logResponse => {
         console.log('Testing response from Login Submit:', logResponse.data);
         localStorage.setItem('token', logResponse.data.payload);
-        setTimeout(() => {history.push('/bubbly')}, 2000);
+        document.getElementById('loadMsg').style.display = 'block';
+        setTimeout(() => {history.push('/bubbly')}, 1500);
         //history.push('/bubbly');
       })
       .catch(logError => {
@@ -80,6 +81,9 @@ const Login = () => {
         </div>
         <div style={formStyle().btnDiv}>
           <button style={formStyle().btn}>Login!</button>
+        </div>
+        <div id="loadMsg" style={{display: 'none'}}>
+          <p>Validating. Loading page...</p>
         </div>
       </form>
     </div>
