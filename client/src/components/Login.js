@@ -1,13 +1,91 @@
-import React from "react";
+import React, {useState} from "react";
+import axios from 'axios';
+import {axiosWithAuth} from '../utils/axiosWithAuth';
+import {useHistory} from 'react-router-dom';
 
-const Login = () => {
+const blankFields = {
+  username: '',
+  password: ''
+};
+
+const Login = props => {
   // make a post request to retrieve a token from the api
   // when you have handled the token, navigate to the BubblePage route
+  const [credentials, setCredentials] = useState(blankFields);
+  //const history = useHistory();
+
+  const updateFields = evt => {
+    const {name, value} = evt.target;
+
+    setCredentials({...credentials, [name]: value});
+  };
+
+  const submitLogin = evt => {
+    evt.preventDefault();
+    console.log('Checking credentials:', credentials.username, credentials.password);
+    //axios.post('http://localhost:5000/api/login', credentials)
+    axiosWithAuth()
+      .post('/api/login', credentials)
+      .then(logResponse => {
+        console.log('Testing response from Login Submit:', logResponse.data);
+        localStorage.setItem('token', logResponse.data.payload);
+        props.history.push('/bubbly');
+      })
+      .catch(logError => {
+        console.log('(Login) Error logging in');
+      })
+  };
+
+  const formStyle = () => {
+    return {
+      container: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+      },
+      h1: {
+        color: 'red'
+      },
+      form: {
+        width: '450px',
+        height: '100px',
+        margin: '10px 50px',
+        padding: '20px 10px',
+        borderRadius: '20px',
+        background: 'silver'},
+      div: {
+        width: '320px',
+        display: 'flex'
+      },
+      btnDiv: {
+        width: '150px',
+        marginTop: '10px'
+      },
+      btn: {
+        background: 'lightgreen',
+        color: 'green'
+      }
+    };
+  };
+
   return (
-    <>
-      <h1>Welcome to the Bubble App!</h1>
-      <p>Build a login page here</p>
-    </>
+    <div style={formStyle().container}>
+      <h1 style={formStyle().h1}>Welcome to the Bubble App!</h1>
+      <form style={formStyle().form} onSubmit={submitLogin}>
+        <div style={formStyle().div}>
+          <div style={{width: '220px'}}><label>Enter Username:</label></div>
+          <div><input type='text' name='username' value={credentials.username} onChange={updateFields} /></div>
+        </div>
+        <div style={formStyle().div}>
+          <div style={{width: '220px'}}><label>Enter Password:</label></div>
+          <div><input type='password' name='password' value={credentials.password} onChange={updateFields} /></div>
+        </div>
+        <div style={formStyle().btnDiv}>
+          <button style={formStyle().btn}>Login!</button>
+        </div>
+      </form>
+    </div>
   );
 };
 
